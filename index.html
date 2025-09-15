@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سایت ساده با دکمه</title>
+  <style>
+    body { font-family: Vazirmatn, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#f7f7f8; margin:0; }
+    .container { max-width: 680px; margin: 10vh auto; padding: 24px; background: #fff; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+    h1 { margin: 0 0 12px; font-size: 28px; }
+    p { margin: 0 0 20px; color: #444; }
+    .btn { display:inline-block; padding: 12px 18px; border: none; border-radius: 12px; background: #111; color: #fff; cursor: pointer; font-size: 16px; }
+    .btn:active { transform: translateY(1px); }
+    .link { color:#0b5; text-decoration:none }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div class="container">
+      <h1>جاوااسکریپت غیرفعال است</h1>
+      <p>برای دیدن صفحه پیام <a class="link" href="#message">اینجا</a> را بزنید.</p>
+    </div>
+  </noscript>
+
+  <div id="app" hidden></div>
+
+  <script>
+    const app = document.getElementById('app');
+
+    function homeView() {
+      return `
+        <div class="container">
+          <h1>صفحه اصلی</h1>
+          <p>روی دکمه بزن تا وارد صفحهٔ پیام شوی.</p>
+          <button class="btn" id="goBtn">رفتن به صفحه پیام</button>
+        </div>
+      `;
+    }
+
+    function messageView() {
+      return `
+        <div class="container">
+          <h1>صفحه پیام</h1>
+          <p style="font-size:20px;">سلام خوبی چخبر</p>
+          <button class="btn" id="backBtn">بازگشت</button>
+        </div>
+      `;
+    }
+
+    function render() {
+      app.hidden = false;
+      const hash = location.hash.replace('#','');
+      if (hash === 'message') {
+        app.innerHTML = messageView();
+        document.getElementById('backBtn').onclick = () => {
+          history.pushState(null, '', '#');
+          render();
+        };
+      } else {
+        app.innerHTML = homeView();
+        document.getElementById('goBtn').onclick = () => {
+          // رفتن به صفحه پیام
+          history.pushState(null, '', '#message');
+          render();
+        };
+      }
+    }
+
+    window.addEventListener('hashchange', render);
+    window.addEventListener('popstate', render);
+    render();
+  </script>
+</body>
+</html>
